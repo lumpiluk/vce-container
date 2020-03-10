@@ -11,13 +11,18 @@ From: debian:10
     #
 
 %post
+    apt-get update
+
+    # Python essentials:
+    apt-get install -y python3.7 python3.7-dev python3.7-venv python3-pip
+    pip3 install pipenv
+
     # SUMO:
     export SUMO_VERSION=v1_1_0
     export SUMO_HOME=/opt/sumo/$SUMO_VERSION
     echo 'export SUMO_VERSION=v1_1_0' >> $SINGULARITY_ENVIRONMENT
     echo 'export SUMO_HOME=/opt/sumo/$SUMO_VERSION' >> $SINGULARITY_ENVIRONMENT
     echo 'export PATH=$SUMO_HOME/bin:$PATH' >> $SINGULARITY_ENVIRONMENT
-    apt-get update
     apt-get install -y \
         build-essential \
         wget \
@@ -25,7 +30,6 @@ From: debian:10
         clang \
         g++ \
         python \
-        python3.7 \
         xvfb \
         unzip \
         desktop-file-utils \

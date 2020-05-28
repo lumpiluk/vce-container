@@ -25,8 +25,9 @@ From: debian:10
         perl \
         curl \
         wget \
-        poppler-utils
-    curl -o /tmp/install-tl-unx.tar.gz http://ftp.acc.umu.se/mirror/CTAN/systems/texlive/tlnet/install-tl-unx.tar.gz
+        poppler-utils \
+        libusb-1.0
+    curl -L -o /tmp/install-tl-unx.tar.gz http://ftp.acc.umu.se/mirror/CTAN/systems/texlive/tlnet/install-tl-unx.tar.gz
     cd /tmp/
     tar xzf install-tl-unx.tar.gz
     rm install-tl-unx.tar.gz

@@ -45,7 +45,7 @@ From: debian:10
     # Python essentials:
     apt-get install --no-install-recommends -y \
         python3.7 python3.7-dev python3.7-venv python3-pip
-    pip3 install setuptools
+    pip3 install wheel setuptools
     pip3 install pipenv
 
     # SUMO:

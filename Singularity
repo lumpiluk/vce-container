@@ -74,7 +74,7 @@ From: debian:10
         libgl2ps-dev \
         swig \
         git \
-        glibc \
+        libc-dev-bin \
         cmake
     mkdir -p /opt/sumo
     cd /opt/sumo

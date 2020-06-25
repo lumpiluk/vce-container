@@ -15,36 +15,54 @@ From: debian:10
     singularity_texlive.profile /tmp/texlive.profile
 
 %environment
-    #
+    PYENV_ROOT=/opt/pyenv
+    PATH=$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
 
 %post
     apt-get update
 
     # LaTeX via Texlive
+    # (Very unreliable installation method, feels like it works only every 10th time. The other times, install-tl or tlmgr complain about untrusted mirrors, invalid certificates, etc.)
     apt-get install --no-install-recommends -y \
         perl \
         curl \
         wget \
+        git \
         poppler-utils \
         libusb-1.0
-    wget -nv -O /tmp/install-tl-unx.tar.gz http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
-    cd /tmp/
-    tar xzf install-tl-unx.tar.gz
-    rm install-tl-unx.tar.gz
-    bash -c "cd /tmp/install-tl-* && ./install-tl -profile /tmp/texlive.profile -no-verify-downloads -persistent-downloads"
-    echo 'export PATH=/usr/local/texlive/bin/x86_64-linux:$PATH' >> $SINGULARITY_ENVIRONMENT
-    echo 'export MANPATH=/usr/local/texlive/texmf-dist/doc/man:$MANPATH' >> $SINGULARITY_ENVIRONMENT
-    echo 'export INFOPATH=/usr/local/texlive/texmf-dist/doc/info:$INFOPATH' >> $SINGULARITY_ENVIRONMENT
+#    wget -nv -O /tmp/install-tl-unx.tar.gz http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
+#    cd /tmp/
+#    tar xzf install-tl-unx.tar.gz
+#    rm install-tl-unx.tar.gz
+#    bash -c "cd /tmp/install-tl-* && ./install-tl -profile /tmp/texlive.profile -no-verify-downloads -persistent-downloads"
+#    echo 'export PATH=/usr/local/texlive/bin/x86_64-linux:$PATH' >> $SINGULARITY_ENVIRONMENT
+#    echo 'export MANPATH=/usr/local/texlive/texmf-dist/doc/man:$MANPATH' >> $SINGULARITY_ENVIRONMENT
+#    echo 'export INFOPATH=/usr/local/texlive/texmf-dist/doc/info:$INFOPATH' >> $SINGULARITY_ENVIRONMENT
+#
+#    export PATH=/usr/local/texlive/bin/x86_64-linux:$PATH
+#    # Install individual additional packages (saves a lot of diskspace compared to using the next 'level' of `install-tl`):
+#    tlmgr install csquotes
+#    tlmgr install ucs  # for utf8x.def, expected by Matplotlib
+#    tlmgr install pgf xcolor
 
-    export PATH=/usr/local/texlive/bin/x86_64-linux:$PATH
-    # Install individual additional packages (saves a lot of diskspace compared to using the next 'level' of `install-tl`):
-    tlmgr install csquotes
-    tlmgr install ucs  # for utf8x.def, expected by Matplotlib
-    tlmgr install pgf xcolor
-
-    # Python essentials:
+    # Python essentials, build dependencies:
     apt-get install --no-install-recommends -y \
-        python3.7 python3.7-dev python3.7-venv python3-pip
+        python3.7 python3.7-dev python3.7-venv \
+        python3-pip \
+        make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
+
+    # # Python 3.5 not available, but required for EVI -> using Pyenv
+    # git clone https://github.com/pyenv/pyenv.git /opt/pyenv
+    # export PYENV_ROOT=/opt/pyenv
+    # export PATH=$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
+    # # Cflags for python compilation with pyenv (see their wiki):
+    # export CFLAGS="-O2"
+    # pyenv install 3.5.9
+    # pyenv global 3.5.9
+    # pyenv rehash
+    # python3 --version
+    # python3 -m ensurepip --upgrade
+    pip3 install -U pip
     pip3 install wheel setuptools
     pip3 install pipenv
 
@@ -88,9 +106,9 @@ From: debian:10
     cd build/cmake-build
     cmake ../..
     make -j$(nproc)
-    
+
     # TODO: OMNeT++, Veins?
-    
+
     # Cleanup
     apt-get clean
     rm -rf /var/lib/apt

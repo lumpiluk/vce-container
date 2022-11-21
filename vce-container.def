@@ -1,1 +1,87 @@
-vce_container_2022-11-21_omnet-6.0.1_veins5.2_sumo1.15.0.sif
+BootStrap: docker
+From: archlinux:latest
+
+%post
+    # run after base OS is installed
+    pacman --noconfirm -Syuv
+    pacman --noconfirm -S \
+        gvim \
+        tmux \
+        git \
+        wget \
+        which \
+        unzip \
+        protobuf \
+        ccache \
+        bash-completion \
+        gcc \
+        openscenegraph \
+        python \
+        proj \
+        fox \
+        xerces-c \
+        gdal \
+        gl2ps \
+        cmake \
+        help2man \
+        swig \
+        gtest \
+        gmock \
+        make \
+        libxml2 \
+        qt5-base \
+        tcl \
+        jdk-openjdk \
+        openmpi \
+        libpcap \
+        doxygen \
+        graphviz \
+        clang \
+        openscenegraph \
+        python \
+        python-scipy \
+        python-pandas \
+        python-poetry \
+        sh \
+        wget \
+        cmake \
+        bison \
+        flex \
+        perl \
+        zeromq
+
+    # Install OMNeT++ to /opt/omnetpp:
+    git clone https://github.com/omnetpp/omnetpp.git -b omnetpp-6.0.1 /opt/omnetpp/
+    cd /opt/omnetpp
+    cp configure.user.dist configure.user
+    ls -lah
+    bash -c "source setenv && ./configure && make -j$(nproc)"
+
+    # Install Veins to /opt/veins:
+    mkdir /opt/veins
+    cd /opt/veins
+    wget http://veins.car2x.org/download/veins-5.2.zip
+    unzip veins-5.2.zip
+    bash -c "cd /opt/omnetpp && source setenv && cd /opt/veins/veins-veins-5.2 && source setenv && ./configure && make -j$(nproc)"
+
+    # Install SUMO to /opt/sumo:
+    git clone https://github.com/eclipse/sumo.git -b v1_15_0 /opt/sumo/
+    export SUMO_HOME="/opt/sumo/"
+    mkdir /opt/sumo/build/cmake-build/
+    cd /opt/sumo/build/cmake-build
+    cmake ../../
+    make -j$(nproc)
+
+%environment
+    export LC_ALL=C
+    export PATH=/opt/sumo/bin:$PATH
+    export SUMO_SOME=/opt/sumo/
+    cd /opt/omnetpp && source /opt/omnetpp/setenv
+    cd /opt/veins/veins-veins-5.2 && source setenv
+
+%runscript
+    echo "This is the VCE container speaking. Please use `apptainer shell` with me."
+
+%labels
+    Author Lukas Stratmann <stratmann@ccs-labs.org>
+    Version 0.1.0

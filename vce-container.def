@@ -3,6 +3,10 @@ From: archlinux:latest
 
 %post
     # run after base OS is installed
+    omnetpp_version="6.0.1"
+    veins_version="5.2"
+    sumo_version="v1_15_0"
+
     pacman --noconfirm -Syuv
     pacman --noconfirm -S \
         gvim \
@@ -49,9 +53,12 @@ From: archlinux:latest
         flex \
         perl \
         zeromq
+    # Clear cache:
+    # (--noconfirm will not work here because 'N' is the default.)
+    yes | pacman -Scc
 
     # Install OMNeT++ to /opt/omnetpp:
-    git clone https://github.com/omnetpp/omnetpp.git -b omnetpp-6.0.1 /opt/omnetpp/
+    git clone https://github.com/omnetpp/omnetpp.git -b omnetpp-$omnetpp_version /opt/omnetpp/
     cd /opt/omnetpp
     cp configure.user.dist configure.user
     ls -lah
@@ -60,12 +67,13 @@ From: archlinux:latest
     # Install Veins to /opt/veins:
     mkdir /opt/veins
     cd /opt/veins
-    wget http://veins.car2x.org/download/veins-5.2.zip
-    unzip veins-5.2.zip
-    bash -c "cd /opt/omnetpp && source setenv && cd /opt/veins/veins-veins-5.2 && source setenv && ./configure && make -j$(nproc)"
+    wget http://veins.car2x.org/download/veins-$veins_version.zip
+    unzip veins-$veins_version.zip
+    rm veins-$veins_version.zip
+    bash -c "cd /opt/omnetpp && source setenv && cd /opt/veins/veins-veins-$veins_version && source setenv && ./configure && make -j$(nproc)"
 
     # Install SUMO to /opt/sumo:
-    git clone https://github.com/eclipse/sumo.git -b v1_15_0 /opt/sumo/
+    git clone https://github.com/eclipse/sumo.git -b $sumo_version /opt/sumo/
     export SUMO_HOME="/opt/sumo/"
     mkdir /opt/sumo/build/cmake-build/
     cd /opt/sumo/build/cmake-build
@@ -75,9 +83,10 @@ From: archlinux:latest
 %environment
     export LC_ALL=C
     export PATH=/opt/sumo/bin:$PATH
-    export SUMO_SOME=/opt/sumo/
+    export SUMO_HOME=/opt/sumo/
     cd /opt/omnetpp && source /opt/omnetpp/setenv
     cd /opt/veins/veins-veins-5.2 && source setenv
+    alias ll="ls -lah"
 
 %runscript
     echo "This is the VCE container speaking. Please use `apptainer shell` with me."

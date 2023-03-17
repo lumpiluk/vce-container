@@ -5,7 +5,7 @@ From: archlinux:latest
     # run after base OS is installed
     omnetpp_version="6.0.1"
     veins_version="5.2"
-    sumo_version="v1_15_0"
+    sumo_version="v1_16_0"
 
     pacman --noconfirm -Syuv
     pacman --noconfirm -S \
@@ -43,9 +43,11 @@ From: archlinux:latest
         clang \
         openscenegraph \
         python \
+        python-pip \
         python-scipy \
         python-pandas \
         python-poetry \
+        python-matplotlib \
         sh \
         wget \
         cmake \
@@ -56,13 +58,19 @@ From: archlinux:latest
     # Clear cache:
     # (--noconfirm will not work here because 'N' is the default.)
     yes | pacman -Scc
+    pip install posix_ipc
 
     # Install OMNeT++ to /opt/omnetpp:
-    git clone https://github.com/omnetpp/omnetpp.git -b omnetpp-$omnetpp_version /opt/omnetpp/
+    cd /opt
+    omnetpp_tgz="omnetpp-${omnetpp_version}-linux-x86_64.tgz"
+    wget "https://github.com/omnetpp/omnetpp/releases/download/omnetpp-${omnetpp_version}/omnetpp-${omnetpp_version}-linux-x86_64.tgz"
+    tar xf $omnetpp_tgz
+    mv omnetpp-${omnetpp_version} omnetpp
     cd /opt/omnetpp
-    cp configure.user.dist configure.user
     ls -lah
+    cp configure.user.dist configure.user
     bash -c "source setenv && ./configure && make -j$(nproc)"
+    rm ../$omnetpp_tgz
 
     # Install Veins to /opt/veins:
     mkdir /opt/veins

@@ -81,11 +81,13 @@ From: archlinux:latest
     bash -c "cd /opt/omnetpp && source setenv && cd /opt/veins/veins-veins-$veins_version && source setenv && ./configure && make -j$(nproc)"
 
     # Install SUMO to /opt/sumo:
-    git clone https://github.com/eclipse/sumo.git -b $sumo_version /opt/sumo/
+    git clone https://github.com/eclipse/sumo.git --depth 1 -b $sumo_version /opt/sumo/
     export SUMO_HOME="/opt/sumo/"
     mkdir /opt/sumo/build/cmake-build/
     cd /opt/sumo/build/cmake-build
-    cmake ../../
+    # cmake ../../
+    # Workaround for "C++ versions less than 14 are not supported" https://github.com/google/googletest/issues/3934
+    cmake -DCMAKE_CXX_STANDARD=14 ../../
     make -j$(nproc)
 
 %environment

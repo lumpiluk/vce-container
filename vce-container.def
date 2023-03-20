@@ -71,6 +71,11 @@ From: archlinux:latest
     cp configure.user.dist configure.user
     bash -c "source setenv && ./configure && make -j$(nproc)"
     rm ../$omnetpp_tgz
+    # Users must be able to write to ide/error.log.
+    # As a workaround for now, we'll patch bin/opp_ide to write to ide/log/error.log instead,
+    # symlink ide/log to /log, and assume a bind mount of /log to some writable host directory.
+    sed -i 's|error.log|log/error.log|g' /opt/omnetpp/bin/opp_ide
+    ln -s /log /opt/omnetpp/ide/log
 
     # Install Veins to /opt/veins:
     mkdir /opt/veins

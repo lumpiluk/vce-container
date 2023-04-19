@@ -7,8 +7,14 @@ From: archlinux:latest
     veins_version="5.2"
     sumo_version="v1_16_0"
 
+    # Convenience (`alias` in %environment doesn't seem to work):
+    echo "#!/usr/bin/env bash" > /usr/bin/ll
+    echo "ls -lah" >> /usr/bin/ll
+    chmod +x /usr/bin/ll
+
     pacman --noconfirm -Syuv
     pacman --noconfirm -S \
+        bear \
         gvim \
         tmux \
         git \
@@ -58,7 +64,9 @@ From: archlinux:latest
     # Clear cache:
     # (--noconfirm will not work here because 'N' is the default.)
     yes | pacman -Scc
-    pip install posix_ipc
+    pip install \
+        posix_ipc \
+        snakemake
 
     # Install OMNeT++ to /opt/omnetpp:
     cd /opt
@@ -101,10 +109,10 @@ From: archlinux:latest
     export SUMO_HOME=/opt/sumo/
     cd /opt/omnetpp && source /opt/omnetpp/setenv
     cd /opt/veins/veins-veins-5.2 && source setenv
-    alias ll="ls -lah"
+    alias ll="ls -lah"  # not working :/
 
 %runscript
-    echo "This is the VCE container speaking. Please use `apptainer shell` with me."
+    echo "This is the VCE container speaking. Please use 'apptainer shell' with me."
 
 %labels
     Author Lukas Stratmann <stratmann@ccs-labs.org>

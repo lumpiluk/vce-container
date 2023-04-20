@@ -9,7 +9,7 @@ From: archlinux:latest
 
     # Convenience (`alias` in %environment doesn't seem to work):
     echo "#!/usr/bin/env bash" > /usr/bin/ll
-    echo "ls -lah" >> /usr/bin/ll
+    echo "ls -lah $@" >> /usr/bin/ll
     chmod +x /usr/bin/ll
 
     pacman --noconfirm -Syuv

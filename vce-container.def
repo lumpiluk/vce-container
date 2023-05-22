@@ -47,6 +47,7 @@ From: archlinux:latest
         doxygen \
         graphviz \
         clang \
+        lldb gdb \
         openscenegraph \
         python \
         python-pip \

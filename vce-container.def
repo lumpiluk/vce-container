@@ -40,6 +40,7 @@ From: archlinux:latest
         make \
         libxml2 \
         qt5-base \
+        qt5-svg \
         tcl \
         jdk-openjdk \
         openmpi \

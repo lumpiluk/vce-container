@@ -68,7 +68,8 @@ From: archlinux:latest
     yes | pacman -Scc
     pip install \
         posix_ipc \
-        snakemake
+        snakemake \
+        cookiecutter
 
     # Install OMNeT++ to /opt/omnetpp:
     cd /opt

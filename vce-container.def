@@ -14,55 +14,55 @@ From: archlinux:latest
 
     pacman --noconfirm -Syuv
     pacman --noconfirm -S \
-        bear \
-        gvim \
-        tmux \
-        git \
-        wget \
-        which \
-        unzip \
-        protobuf \
-        ccache \
         bash-completion \
-        gcc \
-        openscenegraph \
-        python \
-        proj \
-        fox \
-        xerces-c \
-        gdal \
-        gl2ps \
+        bear \
+        bison \
+        ccache \
+        clang \
         cmake \
-        help2man \
-        swig \
-        gtest \
+        dotnet-sdk \
+        doxygen \
+        flex \
+        fox \
+        gcc \
+        gdal \
+        gdb \
+        git \
+        gl2ps \
         gmock \
-        make \
+        graphviz \
+        gtest \
+        gvim \
+        help2man \
+        jdk-openjdk \
+        libpcap \
         libxml2 \
+        lldb \
+        make \
+        mono-msbuild \
+        neovim \
+        openmpi \
+        openscenegraph \
+        proj \
+        protobuf \
+        python \
+        python-cookiecutter \
+        python-matplotlib \
+        python-pandas \
+        python-pip \
+        python-poetry \
+        python-scipy \
         qt5-base \
         qt5-svg \
-        tcl \
-        jdk-openjdk \
-        openmpi \
-        libpcap \
-        doxygen \
-        graphviz \
-        clang \
-        lldb gdb \
-        openscenegraph \
-        python \
-        python-pip \
-        python-scipy \
-        python-pandas \
-        python-poetry \
-        python-matplotlib \
-        python-cookiecutter \
         sh \
-        wget \
-        cmake \
-        bison \
-        flex \
+        swig \
+        tcl \
+        tmux \
         perl \
+        unzip \
+        wget \
+        which \
+        xerces-c \
         zeromq
     # Clear cache:
     # (--noconfirm will not work here because 'N' is the default.)
@@ -74,6 +74,15 @@ From: archlinux:latest
     pip install --break-system-packages \
         posix_ipc \
         snakemake
+
+    # Install Godot to /opt/godot:
+    # Note: Godot 3.x depends on mono-msbuild, but 4.x allegedly doesn't.
+    #  -> TODO: remove mono-msbuild when we eventually switch to 4.x
+    cd /opt
+    wget "https://downloads.tuxfamily.org/godotengine/3.5.2/mono/Godot_v3.5.2-stable_mono_x11_64.zip" \
+        -O godot.zip
+    unzip godot.zip
+    rm godot.zip
 
     # Install OMNeT++ to /opt/omnetpp:
     cd /opt

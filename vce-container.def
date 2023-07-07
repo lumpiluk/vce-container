@@ -5,7 +5,7 @@ From: archlinux:latest
     # run after base OS is installed
     omnetpp_version="6.0.1"
     veins_version="5.2"
-    sumo_version="v1_17_0"
+    sumo_version="v1_18_0"
 
     # Convenience (`alias` in %environment doesn't seem to work):
     echo "#!/usr/bin/env bash" > /usr/bin/ll

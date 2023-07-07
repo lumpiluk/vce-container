@@ -93,6 +93,7 @@ From: archlinux:latest
     cd /opt/omnetpp
     ls -lah
     cp configure.user.dist configure.user
+    sed -i 's/#CXXFLAGS=.*/CXXFLAGS=-std=c++17/g' configure.user
     bash -c "source setenv && ./configure && make -j$(nproc)"
     rm ../$omnetpp_tgz
     # Users must be able to write to ide/error.log.

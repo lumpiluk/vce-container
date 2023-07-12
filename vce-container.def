@@ -40,6 +40,7 @@ From: archlinux:latest
         lldb \
         make \
         neovim \
+        net-tools \
         openmpi \
         openscenegraph \
         proj \
@@ -118,6 +119,7 @@ From: archlinux:latest
     # Workaround for "C++ versions less than 14 are not supported" https://github.com/google/googletest/issues/3934
     cmake -DCMAKE_CXX_STANDARD=14 ../../
     make -j$(nproc)
+    rm -rf /opt/sumo/tests /opt/sumo/.git
 
 %environment
     export LC_ALL=C

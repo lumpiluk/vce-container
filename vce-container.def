@@ -39,7 +39,6 @@ From: archlinux:latest
         libxml2 \
         lldb \
         make \
-        mono-msbuild \
         neovim \
         openmpi \
         openscenegraph \
@@ -79,7 +78,7 @@ From: archlinux:latest
     # Note: Godot 3.x depends on mono-msbuild, but 4.x allegedly doesn't.
     #  -> TODO: remove mono-msbuild when we eventually switch to 4.x
     cd /opt
-    wget "https://downloads.tuxfamily.org/godotengine/3.5.2/mono/Godot_v3.5.2-stable_mono_x11_64.zip" \
+    wget "https://downloads.tuxfamily.org/godotengine/3.6/beta2/mono/Godot_v3.6-beta2_mono_linux_headless_64.zip" \
         -O godot.zip
     unzip godot.zip
     rm godot.zip
